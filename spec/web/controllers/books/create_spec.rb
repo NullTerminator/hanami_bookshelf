@@ -1,19 +1,13 @@
 describe Web::Controllers::Books::Create, type: :action do
-  let(:action) { described_class.new }
-  let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
-  let(:repo) { BookRepository.new }
-
-  after do
-    repo.clear
-  end
+  let(:interactor) { instance_double 'AddBook', call: nil }
+  let(:action) { described_class.new interactor: interactor }
 
   describe 'with valid params' do
-    it 'creates a new book' do
-      action.call(params)
-      book = repo.last
+    let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
 
-      expect(book.id).not_to be_nil
-      expect(book.title).to eq params.dig(:book, :title)
+    it 'calls interactor' do
+      expect(interactor).to receive(:call).with(params[:book])
+      action.call(params)
     end
 
     it 'redirects the user to the books listing' do
@@ -26,6 +20,12 @@ describe Web::Controllers::Books::Create, type: :action do
 
   describe 'with invaid params' do
     let(:params) { { book: {} } }
+
+    # I feel like this should be called and the params should be validated in the interactor
+    #it 'calls interactor' do
+      #expect(interactor).to receive(:call).with(params[:book])
+      #action.call(params)
+    #end
 
     it 'returns HTTP client error' do
       response = action.call(params)
