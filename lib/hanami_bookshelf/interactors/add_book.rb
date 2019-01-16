@@ -14,4 +14,10 @@ class AddBook
     @book = @repo.create(book_attrs)
     @mailer.deliver
   end
+
+  private
+
+  def valid?(attrs)
+    attrs[:title] && attrs[:author]
+  end
 end

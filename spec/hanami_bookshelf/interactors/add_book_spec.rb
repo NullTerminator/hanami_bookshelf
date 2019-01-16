@@ -35,4 +35,13 @@ describe AddBook do
       AddBook.new(mailer: mailer).call(attrs)
     end
   end
+
+  context 'with bad input' do
+    let(:result) { interactor.call(attrs) }
+    let(:attrs) { Hash[] }
+
+    it 'fails' do
+      expect(result).to be_a_failure
+    end
+  end
 end
