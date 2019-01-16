@@ -17,7 +17,7 @@ module Web::Controllers::Books
 
     def call(params)
       if params.valid?
-        @book = @interactor.call(params[:book])
+        @interactor.call(params[:book])
 
         redirect_to routes.books_path
       else
