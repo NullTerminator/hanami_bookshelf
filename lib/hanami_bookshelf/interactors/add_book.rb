@@ -18,6 +18,6 @@ class AddBook
   private
 
   def valid?(attrs)
-    attrs[:title] && attrs[:author]
+    BookValidator.new(attrs).validate.success?
   end
 end

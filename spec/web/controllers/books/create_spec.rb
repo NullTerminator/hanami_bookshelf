@@ -5,6 +5,10 @@ describe Web::Controllers::Books::Create, type: :action do
   describe 'with valid params' do
     let(:params) { Hash[book: { title: 'Confident Ruby', author: 'Avdi Grimm' }] }
 
+    before do
+      allow(interactor).to receive(:call).with(params[:book]).and_return(double successful?: true)
+    end
+
     it 'calls interactor' do
       expect(interactor).to receive(:call).with(params[:book])
       action.call(params)
@@ -20,6 +24,10 @@ describe Web::Controllers::Books::Create, type: :action do
 
   describe 'with invaid params' do
     let(:params) { { book: {} } }
+
+    before do
+      allow(interactor).to receive(:call).with(params[:book]).and_return(double successful?: false)
+    end
 
     # I feel like this should be called and the params should be validated in the interactor
     #it 'calls interactor' do
